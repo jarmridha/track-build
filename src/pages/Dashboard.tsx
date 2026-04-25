@@ -26,10 +26,10 @@ export default function Dashboard() {
   const delayed = projects.filter(p => p.status === "delayed").length;
 
   const stats = [
-    { label: "Total Projects", value: total, icon: FolderKanban, tone: "bg-primary/10 text-primary" },
-    { label: "Running", value: running, icon: PlayCircle, tone: "bg-info/10 text-info" },
-    { label: "Completed", value: completed, icon: CheckCircle2, tone: "bg-success/10 text-success" },
-    { label: "Delayed", value: delayed, icon: AlertTriangle, tone: "bg-destructive/10 text-destructive" },
+    { label: "Total Projects", value: total, icon: FolderKanban, tone: "bg-primary/10 text-primary", to: "/projects" },
+    { label: "Running", value: running, icon: PlayCircle, tone: "bg-info/10 text-info", to: "/projects?status=running" },
+    { label: "Completed", value: completed, icon: CheckCircle2, tone: "bg-success/10 text-success", to: "/projects?status=completed" },
+    { label: "Delayed", value: delayed, icon: AlertTriangle, tone: "bg-destructive/10 text-destructive", to: "/projects?status=delayed" },
   ];
 
   return (
@@ -41,17 +41,19 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
         {stats.map(s => (
-          <Card key={s.label} className="p-4 lg:p-5 shadow-[var(--shadow-card)]">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="text-xs lg:text-sm text-muted-foreground font-medium">{s.label}</div>
-                <div className="text-2xl lg:text-3xl font-bold mt-1">{s.value}</div>
+          <Link key={s.label} to={s.to} className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
+            <Card className="p-4 lg:p-5 shadow-[var(--shadow-card)] transition-all hover:shadow-md hover:border-primary/40 hover:-translate-y-0.5 cursor-pointer h-full">
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="text-xs lg:text-sm text-muted-foreground font-medium">{s.label}</div>
+                  <div className="text-2xl lg:text-3xl font-bold mt-1">{s.value}</div>
+                </div>
+                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${s.tone}`}>
+                  <s.icon className="h-5 w-5" />
+                </div>
               </div>
-              <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${s.tone}`}>
-                <s.icon className="h-5 w-5" />
-              </div>
-            </div>
-          </Card>
+            </Card>
+          </Link>
         ))}
       </div>
 
@@ -84,16 +86,21 @@ export default function Dashboard() {
         </Card>
 
         <Card className="p-5 shadow-[var(--shadow-card)]">
-          <h2 className="font-semibold text-lg mb-4">Recent Activity</h2>
-          <div className="space-y-3">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-semibold text-lg">Recent Activity</h2>
+            <Link to="/activity" className="text-sm text-primary hover:underline inline-flex items-center gap-1">
+              View all <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+          <div className="space-y-1">
             {logs.map(l => (
-              <div key={l.id} className="flex gap-3 text-sm">
+              <Link key={l.id} to="/activity" className="flex gap-3 text-sm rounded-md p-2 -mx-2 hover:bg-accent transition-colors">
                 <div className="h-2 w-2 rounded-full bg-primary mt-1.5 shrink-0" />
                 <div className="min-w-0 flex-1">
                   <div className="text-foreground">{l.description}</div>
                   <div className="text-xs text-muted-foreground">{format(new Date(l.created_at), "MMM d, HH:mm")}</div>
                 </div>
-              </div>
+              </Link>
             ))}
             {logs.length === 0 && <div className="text-sm text-muted-foreground py-4">No activity yet</div>}
           </div>
