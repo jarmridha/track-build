@@ -66,7 +66,7 @@ export default function AuthPage() {
       password: signUpForm.password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
-        data: { full_name: signUpForm.name },
+        data: { full_name: signUpForm.name, requested_role: signUpForm.role },
       },
     });
     setLoading(false);
