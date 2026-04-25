@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Pencil, Trash2, Search, Shield } from "lucide-react";
+import { Pencil, Trash2, Search, Shield, UserPlus, Copy } from "lucide-react";
 import { toast } from "sonner";
 import type { AppRole, UserStatus } from "@/lib/types";
 import { ROLE_LABEL } from "@/lib/types";
