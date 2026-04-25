@@ -72,6 +72,30 @@ export default function Users() {
           <h1 className="text-2xl lg:text-3xl font-bold">User Management</h1>
           <p className="text-muted-foreground">Admins, engineers, and supervisors</p>
         </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button><UserPlus className="h-4 w-4 mr-2" />Invite team member</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader><DialogTitle>Invite a team member</DialogTitle></DialogHeader>
+            <div className="space-y-3 text-sm">
+              <p className="text-muted-foreground">
+                Share this signup link. New members register with their email and a password, then appear here as <strong>Engineer</strong> by default. You can change their role afterward.
+              </p>
+              <div className="flex gap-2">
+                <Input readOnly value={`${window.location.origin}/auth`} />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${window.location.origin}/auth`);
+                    toast.success("Signup link copied");
+                  }}
+                ><Copy className="h-4 w-4" /></Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Card className="p-4 shadow-[var(--shadow-card)]">
