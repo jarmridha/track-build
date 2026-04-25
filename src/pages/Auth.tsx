@@ -8,8 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { HardHat, Loader2 } from "lucide-react";
+import type { AppRole } from "@/lib/types";
 
 const emailSchema = z.string().trim().email("Invalid email").max(255);
 const passwordSchema = z.string().min(6, "Min 6 characters").max(72);
@@ -23,7 +25,7 @@ export default function AuthPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [signInForm, setSignInForm] = useState({ email: "", password: "" });
-  const [signUpForm, setSignUpForm] = useState({ name: "", email: "", password: "" });
+  const [signUpForm, setSignUpForm] = useState<{ name: string; email: string; password: string; role: Extract<AppRole, "engineer" | "supervisor"> }>({ name: "", email: "", password: "", role: "engineer" });
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -64,7 +66,7 @@ export default function AuthPage() {
       password: signUpForm.password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
-        data: { full_name: signUpForm.name },
+        data: { full_name: signUpForm.name, requested_role: signUpForm.role },
       },
     });
     setLoading(false);
@@ -171,6 +173,17 @@ export default function AuthPage() {
                   <Label htmlFor="su-pwd">Password</Label>
                   <Input id="su-pwd" type="password" required minLength={6} value={signUpForm.password}
                     onChange={e => setSignUpForm({ ...signUpForm, password: e.target.value })} />
+                </div>
+                <div>
+                  <Label htmlFor="su-role">Role</Label>
+                  <Select value={signUpForm.role} onValueChange={(v) => setSignUpForm({ ...signUpForm, role: v as "engineer" | "supervisor" })}>
+                    <SelectTrigger id="su-role"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="engineer">Engineer</SelectItem>
+                      <SelectItem value="supervisor">Supervisor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground mt-1">Admins can change your role later.</p>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
