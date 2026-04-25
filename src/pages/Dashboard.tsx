@@ -26,10 +26,10 @@ export default function Dashboard() {
   const delayed = projects.filter(p => p.status === "delayed").length;
 
   const stats = [
-    { label: "Total Projects", value: total, icon: FolderKanban, tone: "bg-primary/10 text-primary" },
-    { label: "Running", value: running, icon: PlayCircle, tone: "bg-info/10 text-info" },
-    { label: "Completed", value: completed, icon: CheckCircle2, tone: "bg-success/10 text-success" },
-    { label: "Delayed", value: delayed, icon: AlertTriangle, tone: "bg-destructive/10 text-destructive" },
+    { label: "Total Projects", value: total, icon: FolderKanban, tone: "bg-primary/10 text-primary", to: "/projects" },
+    { label: "Running", value: running, icon: PlayCircle, tone: "bg-info/10 text-info", to: "/projects?status=running" },
+    { label: "Completed", value: completed, icon: CheckCircle2, tone: "bg-success/10 text-success", to: "/projects?status=completed" },
+    { label: "Delayed", value: delayed, icon: AlertTriangle, tone: "bg-destructive/10 text-destructive", to: "/projects?status=delayed" },
   ];
 
   return (
