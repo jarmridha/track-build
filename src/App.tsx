@@ -40,7 +40,7 @@ const App = () => (
             <Route path="/daily-updates" element={<Shell><DailyUpdates /></Shell>} />
             <Route path="/activity" element={<Shell><ActivityLog /></Shell>} />
             <Route path="/reports" element={<Shell><Reports /></Shell>} />
-            <Route path="/users" element={<ProtectedRoute roles={["admin"]}><AppLayout><Users /></AppLayout></ProtectedRoute>} />
+            <Route path="/users" element={<ProtectedRoute roles={["admin", "supervisor"]}><AppLayout><Users /></AppLayout></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
