@@ -14,16 +14,219 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity_logs: {
+        Row: {
+          action_type: string
+          created_at: string
+          description: string
+          id: string
+          project_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          description: string
+          id?: string
+          project_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          description?: string
+          id?: string
+          project_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_logs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      daily_updates: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          issues: string | null
+          manpower_count: number | null
+          materials_used: string | null
+          next_day_plan: string | null
+          progress_percent: number | null
+          project_id: string
+          remarks: string | null
+          user_id: string
+          work_completed: string | null
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          id?: string
+          issues?: string | null
+          manpower_count?: number | null
+          materials_used?: string | null
+          next_day_plan?: string | null
+          progress_percent?: number | null
+          project_id: string
+          remarks?: string | null
+          user_id: string
+          work_completed?: string | null
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          issues?: string | null
+          manpower_count?: number | null
+          materials_used?: string | null
+          next_day_plan?: string | null
+          progress_percent?: number | null
+          project_id?: string
+          remarks?: string | null
+          user_id?: string
+          work_completed?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_updates_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          status: Database["public"]["Enums"]["user_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string
+          id: string
+          phone?: string | null
+          status?: Database["public"]["Enums"]["user_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          status?: Database["public"]["Enums"]["user_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          assigned_user_id: string | null
+          client: string | null
+          created_at: string
+          created_by: string | null
+          end_date: string | null
+          id: string
+          location: string | null
+          name: string
+          progress: number
+          remarks: string | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["project_status"]
+          updated_at: string
+        }
+        Insert: {
+          assigned_user_id?: string | null
+          client?: string | null
+          created_at?: string
+          created_by?: string | null
+          end_date?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          progress?: number
+          remarks?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          updated_at?: string
+        }
+        Update: {
+          assigned_user_id?: string | null
+          client?: string | null
+          created_at?: string
+          created_by?: string | null
+          end_date?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          progress?: number
+          remarks?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_my_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "engineer" | "supervisor"
+      project_status:
+        | "not_started"
+        | "running"
+        | "completed"
+        | "delayed"
+        | "on_hold"
+      user_status: "active" | "inactive"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +353,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "engineer", "supervisor"],
+      project_status: [
+        "not_started",
+        "running",
+        "completed",
+        "delayed",
+        "on_hold",
+      ],
+      user_status: ["active", "inactive"],
+    },
   },
 } as const
