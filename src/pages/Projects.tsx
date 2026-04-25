@@ -21,7 +21,13 @@ export default function Projects() {
   const { role } = useAuth();
   const [items, setItems] = useState<Proj[]>([]);
   const [q, setQ] = useState("");
-  const [status, setStatus] = useState<string>("all");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const status = searchParams.get("status") ?? "all";
+  const setStatus = (s: string) => {
+    const next = new URLSearchParams(searchParams);
+    if (s === "all") next.delete("status"); else next.set("status", s);
+    setSearchParams(next, { replace: true });
+  };
 
   useEffect(() => {
     supabase.from("projects").select("*").order("created_at", { ascending: false })
