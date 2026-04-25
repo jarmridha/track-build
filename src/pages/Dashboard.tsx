@@ -7,6 +7,19 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { ROLE_LABEL, type ProjectStatus } from "@/lib/types";
 import { FolderKanban, PlayCircle, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from "recharts";
 
 type Proj = { id: string; name: string; client: string | null; progress: number; status: ProjectStatus; end_date: string | null };
 type Log = { id: string; action_type: string; description: string; created_at: string };
@@ -55,6 +68,81 @@ export default function Dashboard() {
             </Card>
           </Link>
         ))}
+      </div>
+
+      <div className="grid lg:grid-cols-3 gap-4 lg:gap-6">
+        <Card className="lg:col-span-2 p-5 shadow-[var(--shadow-card)]">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="font-semibold text-lg">Project Progress Overview</h2>
+              <p className="text-xs text-muted-foreground">Completion percentage by project</p>
+            </div>
+          </div>
+          <div className="w-full h-[360px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={projects.map(p => ({ name: p.name.length > 14 ? p.name.slice(0, 14) + "…" : p.name, progress: p.progress }))}
+                margin={{ top: 10, right: 16, left: -10, bottom: 60 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="name" angle={-35} textAnchor="end" interval={0} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
+                <YAxis domain={[0, 100]} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
+                <Tooltip
+                  contentStyle={{
+                    background: "hsl(var(--popover))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: 8,
+                    color: "hsl(var(--popover-foreground))",
+                  }}
+                  formatter={(v) => [`${v}%`, "Progress"]}
+                />
+                <Bar dataKey="progress" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+
+        <Card className="p-5 shadow-[var(--shadow-card)]">
+          <div className="mb-4">
+            <h2 className="font-semibold text-lg">Status Distribution</h2>
+            <p className="text-xs text-muted-foreground">Breakdown across all projects</p>
+          </div>
+          <div className="w-full h-[360px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={[
+                    { name: "Running", value: running, color: "hsl(var(--info))" },
+                    { name: "Completed", value: completed, color: "hsl(var(--success))" },
+                    { name: "Delayed", value: delayed, color: "hsl(var(--destructive))" },
+                    { name: "Not Started", value: Math.max(total - running - completed - delayed, 0), color: "hsl(var(--muted-foreground))" },
+                  ].filter(d => d.value > 0)}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={60}
+                  outerRadius={110}
+                  paddingAngle={2}
+                >
+                  {[
+                    "hsl(var(--info))",
+                    "hsl(var(--success))",
+                    "hsl(var(--destructive))",
+                    "hsl(var(--muted-foreground))",
+                  ].map((c, i) => <Cell key={i} fill={c} />)}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    background: "hsl(var(--popover))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: 8,
+                    color: "hsl(var(--popover-foreground))",
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-4 lg:gap-6">
