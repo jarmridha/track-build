@@ -174,6 +174,17 @@ export default function AuthPage() {
                   <Input id="su-pwd" type="password" required minLength={6} value={signUpForm.password}
                     onChange={e => setSignUpForm({ ...signUpForm, password: e.target.value })} />
                 </div>
+                <div>
+                  <Label htmlFor="su-role">Role</Label>
+                  <Select value={signUpForm.role} onValueChange={(v) => setSignUpForm({ ...signUpForm, role: v as "engineer" | "supervisor" })}>
+                    <SelectTrigger id="su-role"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="engineer">Engineer</SelectItem>
+                      <SelectItem value="supervisor">Supervisor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground mt-1">Admins can change your role later.</p>
+                </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Create account
