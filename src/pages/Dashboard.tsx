@@ -41,17 +41,19 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
         {stats.map(s => (
-          <Card key={s.label} className="p-4 lg:p-5 shadow-[var(--shadow-card)]">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="text-xs lg:text-sm text-muted-foreground font-medium">{s.label}</div>
-                <div className="text-2xl lg:text-3xl font-bold mt-1">{s.value}</div>
+          <Link key={s.label} to={s.to} className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
+            <Card className="p-4 lg:p-5 shadow-[var(--shadow-card)] transition-all hover:shadow-md hover:border-primary/40 hover:-translate-y-0.5 cursor-pointer h-full">
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="text-xs lg:text-sm text-muted-foreground font-medium">{s.label}</div>
+                  <div className="text-2xl lg:text-3xl font-bold mt-1">{s.value}</div>
+                </div>
+                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${s.tone}`}>
+                  <s.icon className="h-5 w-5" />
+                </div>
               </div>
-              <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${s.tone}`}>
-                <s.icon className="h-5 w-5" />
-              </div>
-            </div>
-          </Card>
+            </Card>
+          </Link>
         ))}
       </div>
 
