@@ -86,16 +86,21 @@ export default function Dashboard() {
         </Card>
 
         <Card className="p-5 shadow-[var(--shadow-card)]">
-          <h2 className="font-semibold text-lg mb-4">Recent Activity</h2>
-          <div className="space-y-3">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-semibold text-lg">Recent Activity</h2>
+            <Link to="/activity" className="text-sm text-primary hover:underline inline-flex items-center gap-1">
+              View all <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+          <div className="space-y-1">
             {logs.map(l => (
-              <div key={l.id} className="flex gap-3 text-sm">
+              <Link key={l.id} to="/activity" className="flex gap-3 text-sm rounded-md p-2 -mx-2 hover:bg-accent transition-colors">
                 <div className="h-2 w-2 rounded-full bg-primary mt-1.5 shrink-0" />
                 <div className="min-w-0 flex-1">
                   <div className="text-foreground">{l.description}</div>
                   <div className="text-xs text-muted-foreground">{format(new Date(l.created_at), "MMM d, HH:mm")}</div>
                 </div>
-              </div>
+              </Link>
             ))}
             {logs.length === 0 && <div className="text-sm text-muted-foreground py-4">No activity yet</div>}
           </div>
