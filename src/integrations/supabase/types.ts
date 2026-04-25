@@ -217,6 +217,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      sweep_project_statuses: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "engineer" | "supervisor"
