@@ -25,7 +25,7 @@ export default function AuthPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [signInForm, setSignInForm] = useState({ email: "", password: "" });
-  const [signUpForm, setSignUpForm] = useState({ name: "", email: "", password: "" });
+  const [signUpForm, setSignUpForm] = useState<{ name: string; email: string; password: string; role: Extract<AppRole, "engineer" | "supervisor"> }>({ name: "", email: "", password: "", role: "engineer" });
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
