@@ -7,6 +7,19 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { ROLE_LABEL, type ProjectStatus } from "@/lib/types";
 import { FolderKanban, PlayCircle, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from "recharts";
 
 type Proj = { id: string; name: string; client: string | null; progress: number; status: ProjectStatus; end_date: string | null };
 type Log = { id: string; action_type: string; description: string; created_at: string };
