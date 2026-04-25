@@ -16,7 +16,7 @@ const NAV = [
   { to: "/daily-updates", label: "Daily Updates", icon: ClipboardList, roles: ["admin", "engineer", "supervisor"] },
   { to: "/activity", label: "Activity Log", icon: Activity, roles: ["admin", "engineer", "supervisor"] },
   { to: "/reports", label: "Reports", icon: FileBarChart, roles: ["admin", "engineer", "supervisor"] },
-  { to: "/users", label: "Users", icon: Users, roles: ["admin"] },
+  { to: "/users", label: "Users", icon: Users, roles: ["admin", "supervisor"] },
 ] as const;
 
 function NavItems({ role, onClick }: { role: string | null; onClick?: () => void }) {
