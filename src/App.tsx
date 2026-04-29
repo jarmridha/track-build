@@ -16,6 +16,7 @@ import DailyUpdates from "./pages/DailyUpdates";
 import ActivityLog from "./pages/ActivityLog";
 import Reports from "./pages/Reports";
 import Users from "./pages/Users";
+import Purchases from "./pages/Purchases";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/projects/:id" element={<Shell><ProjectDetail /></Shell>} />
             <Route path="/projects/:id/edit" element={<ProtectedRoute roles={["admin"]}><AppLayout><ProjectForm /></AppLayout></ProtectedRoute>} />
             <Route path="/daily-updates" element={<Shell><DailyUpdates /></Shell>} />
+            <Route path="/purchases" element={<Shell><Purchases /></Shell>} />
             <Route path="/activity" element={<Shell><ActivityLog /></Shell>} />
             <Route path="/reports" element={<Shell><Reports /></Shell>} />
             <Route path="/users" element={<ProtectedRoute roles={["admin", "supervisor"]}><AppLayout><Users /></AppLayout></ProtectedRoute>} />
