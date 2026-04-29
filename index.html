@@ -3,29 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- TODO: Set the document title to the name of your application -->
-    <title>Lovable App</title>
-    <meta name="description" content="Construction Project Tracker is a responsive web app for managing construction projects, daily progress, and user roles.">
-    <meta name="author" content="Lovable" />
-
-    <!-- TODO: Update og:title to match your application name -->
-    
-    
+    <title>Track Build | Construction Project Management</title>
+    <meta name="description" content="Track Build is a company-ready construction project management app for project tracking, daily site updates, purchases, reports, photos, and offline field work.">
+    <meta name="author" content="Track Build" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b1e30f0c-fdf7-4fc3-a19d-e4e0c44b3754/id-preview-e022e440--40127c22-eb50-4116-be90-6bc86ee0f5da.lovable.app-1777112680431.png">
-
+    <meta property="og:title" content="Track Build | Construction Project Management" />
+    <meta property="og:description" content="Company-ready construction project tracking, site updates, purchase entries, reports, photos, and offline field workflow." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b1e30f0c-fdf7-4fc3-a19d-e4e0c44b3754/id-preview-e022e440--40127c22-eb50-4116-be90-6bc86ee0f5da.lovable.app-1777112680431.png">
-    <meta property="og:title" content="Lovable App">
-  <meta name="twitter:title" content="Lovable App">
-  <meta property="og:description" content="Construction Project Tracker is a responsive web app for managing construction projects, daily progress, and user roles.">
-  <meta name="twitter:description" content="Construction Project Tracker is a responsive web app for managing construction projects, daily progress, and user roles.">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-</head>
-
+    <meta name="twitter:title" content="Track Build" />
+    <meta name="twitter:description" content="Construction project tracking app for field and office use." />
+  </head>
   <body>
     <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
