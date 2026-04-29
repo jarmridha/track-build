@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trash2, Upload, ImageOff } from "lucide-react";
+import { Camera, Trash2, Upload, ImageOff } from "lucide-react";
 import { toast } from "sonner";
 
 type Doc = { id: string; name: string; storage_path: string; created_at: string };
@@ -11,7 +11,8 @@ export function ImagesSection({ projectId, canManage, userId }: { projectId: str
   const [images, setImages] = useState<(Doc & { url: string })[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   async function load() {
     setLoading(true);
@@ -32,25 +33,28 @@ export function ImagesSection({ projectId, canManage, userId }: { projectId: str
 
   useEffect(() => { load(); }, [projectId]);
 
-  async function handleFiles(files: FileList | null) {
+  async function handleFiles(files: FileList | null, source: "camera" | "gallery" = "gallery") {
     if (!files || files.length === 0 || !userId) return;
     setUploading(true);
     try {
       for (const file of Array.from(files)) {
-        const path = `${projectId}/${crypto.randomUUID()}-${file.name}`;
+        const safeName = file.name || `site-photo-${Date.now()}.jpg`;
+        const path = `${projectId}/${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}-${safeName}`;
         const { error: upErr } = await supabase.storage.from("project-images").upload(path, file, { contentType: file.type });
         if (upErr) { toast.error(upErr.message); continue; }
         const { error: insErr } = await supabase.from("project_documents").insert({
           project_id: projectId, user_id: userId, kind: "image",
-          name: file.name, storage_path: path, mime_type: file.type, size_bytes: file.size,
+          name: source === "camera" ? `Camera photo - ${new Date().toLocaleString()}` : safeName,
+          storage_path: path, mime_type: file.type, size_bytes: file.size,
         });
         if (insErr) toast.error(insErr.message);
       }
-      toast.success("Images uploaded");
+      toast.success(source === "camera" ? "Site photo uploaded" : "Images uploaded");
       await load();
     } finally {
       setUploading(false);
-      if (inputRef.current) inputRef.current.value = "";
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      if (cameraInputRef.current) cameraInputRef.current.value = "";
     }
   }
 
@@ -65,15 +69,22 @@ export function ImagesSection({ projectId, canManage, userId }: { projectId: str
 
   return (
     <Card className="p-6 shadow-[var(--shadow-card)]">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="font-semibold text-lg">Images</h2>
+      <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
+        <div>
+          <h2 className="font-semibold text-lg">Site Photos</h2>
+          <p className="text-xs text-muted-foreground">Capture directly from mobile camera or upload from gallery.</p>
+        </div>
         {canManage && (
-          <>
-            <input ref={inputRef} type="file" accept="image/*" multiple className="hidden" onChange={e => handleFiles(e.target.files)} />
-            <Button size="sm" onClick={() => inputRef.current?.click()} disabled={uploading}>
+          <div className="flex gap-2">
+            <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={e => handleFiles(e.target.files, "camera")} />
+            <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={e => handleFiles(e.target.files, "gallery")} />
+            <Button size="sm" onClick={() => cameraInputRef.current?.click()} disabled={uploading}>
+              <Camera className="mr-2 h-4 w-4" />Camera
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
               <Upload className="mr-2 h-4 w-4" />{uploading ? "Uploading…" : "Upload"}
             </Button>
-          </>
+          </div>
         )}
       </div>
       {loading ? (
@@ -81,7 +92,7 @@ export function ImagesSection({ projectId, canManage, userId }: { projectId: str
       ) : images.length === 0 ? (
         <div className="text-muted-foreground text-sm py-10 text-center flex flex-col items-center gap-2">
           <ImageOff className="h-8 w-8 opacity-50" />
-          No images yet
+          No site photos yet
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
